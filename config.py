@@ -5,3 +5,5 @@ VALIDATE_PATH = "data/validate/"
 
 X_PATH = "greyscale/"
 Y_PATH = "ground_truth/"
+
+MODEL_PATH = "model/model.h5"

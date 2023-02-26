@@ -1,6 +1,6 @@
 import cv2
 import os
-from config import TRAIN_PATH, X_PATH, Y_PATH
+from config import TRAIN_PATH, X_PATH, Y_PATH, MODEL_PATH
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
@@ -39,5 +39,6 @@ def train_model(X, Y):
 if __name__ == "__main__":
     train_X, train_Y = preprocess_data(TRAIN_PATH)
     model = train_model(train_X, train_Y)
+    model.save(MODEL_PATH)
 
     print("Test")
