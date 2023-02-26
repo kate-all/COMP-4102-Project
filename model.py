@@ -2,6 +2,7 @@ import cv2
 import os
 from config import TRAIN_PATH, X_PATH, Y_PATH
 import tensorflow as tf
+from tensorflow import keras
 import numpy as np
 
 def preprocess_data(src) -> (tf.Tensor, tf.Tensor):
@@ -29,9 +30,12 @@ def preprocess_data(src) -> (tf.Tensor, tf.Tensor):
 
 def train_model(X, Y):
     # keras model
-    # return model
-    pass
+    model = keras.Sequential()
+
+    return model
 
 if __name__ == "__main__":
     train_X, train_Y = preprocess_data(TRAIN_PATH)
+    model = train_model(train_X, train_Y)
+
     print("Test")
