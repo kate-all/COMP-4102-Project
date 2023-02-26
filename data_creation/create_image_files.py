@@ -22,3 +22,5 @@ def create_X_data():
     create_black_and_white(TRAIN_PATH)
     create_black_and_white(TEST_PATH)
     create_black_and_white(VALIDATE_PATH)
+
+create_X_data()
