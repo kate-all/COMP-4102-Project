@@ -7,8 +7,9 @@ import numpy as np
 
 def preprocess_data(src) -> (tf.Tensor, tf.Tensor):
     X = np.zeros([0,256,256])
-    Y = np.zeros([0,256,256,3])
+    Y = np.zeros([0,257,256,3])
 
+    src = "../" + src
     files = os.listdir(src + X_PATH)#[:5]
     for file_name in files:
         imgX = cv2.imread(src + X_PATH + file_name, cv2.IMREAD_GRAYSCALE)
