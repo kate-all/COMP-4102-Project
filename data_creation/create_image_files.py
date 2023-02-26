@@ -2,7 +2,7 @@ import os
 import random
 import shutil
 import cv2
-from config import TEST_PATH, TRAIN_PATH, VALIDATE_PATH, X, Y
+from config import TEST_PATH, TRAIN_PATH, VALIDATE_PATH, X_PATH, Y_PATH
 
 def move_images(src, dest, num_files):
     files = os.listdir(src)
@@ -11,11 +11,11 @@ def move_images(src, dest, num_files):
         shutil.move(os.path.join(src, file_name), dest)
 
 def create_black_and_white(data_path):
-    src = "../" + data_path + Y
+    src = "../" + data_path + Y_PATH
     files = os.listdir(src)
     for file_name in files:
         img = cv2.imread(src + file_name, cv2.IMREAD_GRAYSCALE)
-        cv2.imwrite("../" + data_path + X + file_name, img)
+        cv2.imwrite("../" + data_path + X_PATH + file_name, img)
         print("writing", file_name, "in", data_path)
 
 def create_X_data():
