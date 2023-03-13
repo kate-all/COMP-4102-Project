@@ -29,18 +29,16 @@ def preprocess_data(src):
 
     return X,Y
 
-def train_model(X, Y):
+def train_model(X, Y, epochs=50, k=3, conv_layers=4):
     # keras model
     model = keras.Sequential()
 
     model.add(keras.layers.Conv2D(input_shape=(DIM_ROWS, DIM_COLS, 3), filters=64, kernel_size=(3, 3),
                                      padding="same", activation="relu"))
-    model.add(keras.layers.Conv2D(filters=64, kernel_size=(3, 3), padding="same", activation="relu"))
-    model.add(keras.layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
-    model.add(keras.layers.Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-    model.add(keras.layers.Conv2D(filters=128, kernel_size=(3, 3), padding="same", activation="relu"))
-    model.add(keras.layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+    for _ in range(conv_layers):
+        model.add(keras.layers.Conv2D(filters=64, kernel_size=(k, k), padding="same", activation="relu"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
     model.add(keras.layers.Flatten())
     model.add(keras.layers.Dense(units=1200, activation='relu'))
@@ -48,7 +46,7 @@ def train_model(X, Y):
     model.add(keras.layers.Reshape((DIM_ROWS,DIM_COLS,3)))
 
     model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.01), loss='mean_squared_error')
-    model.fit(X, Y, batch_size=22, epochs=50, verbose=2, validation_split=0)
+    model.fit(X, Y, batch_size=100, epochs=epochs, verbose=2, validation_split=0)
 
     model.save(MODEL_FILE_NAME)
     return model
@@ -56,9 +54,10 @@ def train_model(X, Y):
 def run_experiment(num_epochs, kernel_size, num_conv_layers):
     train_X, train_Y = preprocess_data("../" + TRAIN_PATH)
     val_X, val_Y = preprocess_data("../" + VALIDATE_PATH)
-    model = train_model(train_X, train_Y)
+    model = train_model(train_X, train_Y, epocs=num_epochs, k=kernel_size, conv_layers=num_conv_layers)
     eval = model.evaluate(val_X, val_Y, batch_size=100, return_dict=False)
     print("Loss:", eval[0])
 
 if __name__ == "__main__":
+    run_experiment(20,2,4)
     pass
