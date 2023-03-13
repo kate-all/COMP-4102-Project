@@ -1,6 +1,6 @@
 import cv2
 import os
-from config import TRAIN_PATH, X_PATH, Y_PATH, MODEL_FILE_NAME, DIM_ROWS, DIM_COLS, TEMP
+from config import TRAIN_PATH, X_PATH, Y_PATH, MODEL_FILE_NAME, DIM_ROWS, DIM_COLS, TEMP, VALIDATE_PATH
 from tensorflow import keras
 import numpy as np
 
@@ -53,6 +53,12 @@ def train_model(X, Y):
     model.save(MODEL_FILE_NAME)
     return model
 
-if __name__ == "__main__":
+def run_experiment(num_epochs, kernel_size, num_conv_layers):
     train_X, train_Y = preprocess_data("../" + TRAIN_PATH)
-    train_model(train_X, train_Y)
+    val_X, val_Y = preprocess_data("../" + VALIDATE_PATH)
+    model = train_model(train_X, train_Y)
+    eval = model.evaluate(val_X, val_Y, batch_size=100, return_dict=False)
+    print("Loss:", eval[0])
+
+if __name__ == "__main__":
+    pass
