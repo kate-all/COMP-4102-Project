@@ -1,26 +1,19 @@
 import cv2
 import os
 from config import TRAIN_PATH, X_PATH, Y_PATH, MODEL_FILE_NAME, DIM_ROWS, DIM_COLS, TEMP
-import tensorflow as tf
 from tensorflow import keras
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-from PIL import Image
 
 def preprocess_data(src):
     X = np.zeros([0,DIM_ROWS,DIM_COLS,3])
     Y = np.zeros([0,DIM_ROWS,DIM_COLS,3])
 
-    files = os.listdir(src + X_PATH)[:5]
+    files = os.listdir(src + X_PATH)#[:5]
     for file_name in files:
         imgX = cv2.imread(src + X_PATH + file_name, cv2.IMREAD_GRAYSCALE)
 
-        # gaussian filter
-        img_filtered = cv2.GaussianBlur(imgX, (7, 7), 0.5)
-        
         # write filtered data
-        cv2.imwrite(src + TEMP + file_name, img_filtered)
+        cv2.imwrite(src + TEMP + file_name, imgX)
 
         # convert to array - X
         imgX = keras.preprocessing.image.load_img(src + X_PATH + file_name)
@@ -55,20 +48,11 @@ def train_model(X, Y):
     model.add(keras.layers.Reshape((DIM_ROWS,DIM_COLS,3)))
 
     model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.01), loss='mean_squared_error')
-    model.fit(X, Y, batch_size=22, epochs=1, verbose=2, validation_split=0)
+    model.fit(X, Y, batch_size=22, epochs=50, verbose=2, validation_split=0)
 
     model.save(MODEL_FILE_NAME)
     return model
 
 if __name__ == "__main__":
     train_X, train_Y = preprocess_data("../" + TRAIN_PATH)
-    img = keras.preprocessing.image.array_to_img(train_X[0])
-    # img.show()
-
-    mpl.use('tkAgg')
-
-    fig, ax = plt.subplots()
-    ax.imshow(img)
-    # plt.imshow(img)
-    plt.show()
-    # model = train_model(train_X, train_Y)
+    train_model(train_X, train_Y)
