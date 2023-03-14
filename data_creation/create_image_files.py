@@ -15,7 +15,7 @@ def create_black_and_white(data_path):
     files = os.listdir(src)
     for file_name in files:
         img = cv2.imread(src + file_name, cv2.IMREAD_GRAYSCALE)
-        # img = cv2.GaussianBlur(img, (7, 7), 0.5)
+        img = cv2.GaussianBlur(img, (7, 7), 0.5)
         cv2.imwrite("../" + data_path + X_PATH + file_name, img)
         print("writing", file_name, "in", data_path)
 
