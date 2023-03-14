@@ -10,11 +10,6 @@ def preprocess_data(src):
 
     files = os.listdir(src + X_PATH)#[:5]
     for file_name in files:
-        imgX = cv2.imread(src + X_PATH + file_name, cv2.IMREAD_GRAYSCALE)
-
-        # write filtered data
-        cv2.imwrite(src + TEMP + file_name, imgX)
-
         # convert to array - X
         imgX = keras.preprocessing.image.load_img(src + X_PATH + file_name)
         imgX = np.expand_dims(keras.preprocessing.image.img_to_array(imgX), axis=0)
@@ -33,7 +28,7 @@ def train_model(X, Y, epochs=50, k=3, conv_layers=4):
     # keras model
     model = keras.Sequential()
 
-    model.add(keras.layers.Conv2D(input_shape=(DIM_ROWS, DIM_COLS, 3), filters=64, kernel_size=(3, 3),
+    model.add(keras.layers.Conv2D(input_shape=(DIM_ROWS, DIM_COLS, 1), filters=64, kernel_size=(3, 3),
                                      padding="same", activation="relu"))
 
     for _ in range(conv_layers):
