@@ -8,8 +8,11 @@ Y_PATH = "ground_truth/"
 TEMP = "temp/"
 
 MODEL_FILE_NAME = "model.h5"
-MODEL_PATH = "model/" + MODEL_FILE_NAME
+MODEL_PATH = "model/"
 
-DIM_ROWS = 256
-DIM_COLS = 256
+DOWNSAMPLE_ITERS = 2
+
+DIM_ROWS = 256 // (2 ** DOWNSAMPLE_ITERS)
+DIM_COLS = 256 // (2 ** DOWNSAMPLE_ITERS)
+
 
