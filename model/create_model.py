@@ -5,13 +5,13 @@ from tensorflow import keras
 import numpy as np
 
 def preprocess_data(src):
-    X = np.zeros([0,DIM_ROWS,DIM_COLS,3])
+    X = np.zeros([0,DIM_ROWS,DIM_COLS,1])
     Y = np.zeros([0,DIM_ROWS,DIM_COLS,3])
 
     files = os.listdir(src + X_PATH)[:100]
     for file_name in files:
         # convert to array - X
-        imgX = keras.preprocessing.image.load_img(src + X_PATH + file_name)
+        imgX = keras.preprocessing.image.load_img(src + X_PATH + file_name, grayscale=True)
         imgX = np.expand_dims(keras.preprocessing.image.img_to_array(imgX), axis=0)
         X = np.append(X, imgX, axis=0)
 
@@ -36,12 +36,11 @@ def train_model(X, Y, epochs=50, k=3, conv_layers=4):
         model.add(keras.layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
     model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(units=1200, activation='relu'))
     model.add(keras.layers.Dense(units=(DIM_ROWS*DIM_COLS*3), activation='sigmoid' ))
     model.add(keras.layers.Reshape((DIM_ROWS,DIM_COLS,3)))
 
-    model.compile(optimizer=keras.optimizers.SGD(learning_rate=0.01), loss='mean_squared_error')
-    model.fit(X, Y, batch_size=100, epochs=epochs, verbose=2, validation_split=0)
+    model.compile(optimizer=keras.optimizers.SGD(learning_rate=1e-5), loss='mean_squared_error')
+    model.fit(X, Y, batch_size=20, epochs=epochs, verbose=2, validation_split=0)
 
     model.save(MODEL_FILE_NAME)
     return model
@@ -51,7 +50,9 @@ def run_experiment(num_epochs, kernel_size, num_conv_layers):
     val_X, val_Y = preprocess_data("../" + VALIDATE_PATH)
     model = train_model(train_X, train_Y, epochs=num_epochs, k=kernel_size, conv_layers=num_conv_layers)
     eval = model.evaluate(val_X, val_Y, batch_size=100, return_dict=False)
-    print("Loss:", eval[0])
+    print("Validation Loss:", eval)
+
+    return model
 #
 # if __name__ == "__main__":
 #     run_experiment(20,2,4)
