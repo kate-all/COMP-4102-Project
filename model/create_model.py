@@ -1,14 +1,16 @@
 import cv2
-import os
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import TRAIN_PATH, X_PATH, Y_PATH, MODEL_FILE_NAME, DIM_ROWS, DIM_COLS, TEMP, VALIDATE_PATH
 from tensorflow import keras
+import tensorflow as tf
 import numpy as np
 
 def preprocess_data(src):
     X = np.zeros([0,DIM_ROWS,DIM_COLS,1])
     Y = np.zeros([0,DIM_ROWS,DIM_COLS,3])
 
-    files = os.listdir(src + X_PATH)[:100]
+    files = os.listdir(src + X_PATH)
     for file_name in files:
         # convert to array - X
         imgX = keras.preprocessing.image.load_img(src + X_PATH + file_name, grayscale=True)
@@ -46,14 +48,13 @@ def train_model(X, Y, epochs=50, k=3, conv_layers=4):
     return model
 
 def run_experiment(num_epochs, kernel_size, num_conv_layers):
-    train_X, train_Y = preprocess_data("../" + TRAIN_PATH)
-    val_X, val_Y = preprocess_data("../" + VALIDATE_PATH)
+    train_X, train_Y = preprocess_data(TRAIN_PATH)
+    val_X, val_Y = preprocess_data(VALIDATE_PATH)
     model = train_model(train_X, train_Y, epochs=num_epochs, k=kernel_size, conv_layers=num_conv_layers)
     eval = model.evaluate(val_X, val_Y, batch_size=100, return_dict=False)
     print("Validation Loss:", eval)
 
     return model
-#
-# if __name__ == "__main__":
-#     run_experiment(20,2,4)
-#     pass
+
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+run_experiment(20,2,4)
