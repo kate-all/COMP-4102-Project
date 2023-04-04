@@ -61,7 +61,7 @@ def colourize(model, img_filename, show_ground_truth=True):
         display_results(x, y_hat)
 
 if __name__ == "__main__":
-    model = run_experiment(100,3,4)
+    model = run_experiment(500,5,6)
     colourize(model, "0gfjPV.jpg")
     #model.predict(TEST_PATH + TEMP + "0gfjPV.jpg")
 

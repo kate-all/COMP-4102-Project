@@ -19,7 +19,6 @@ def preprocess_data(src):
         imgY = keras.preprocessing.image.load_img(src + Y_PATH + file_name)
         imgY = np.expand_dims(keras.preprocessing.image.img_to_array(imgY), axis=0)
         Y = np.append(Y, imgY, axis=0)
-
         print("Added", file_name)
 
     return X,Y
@@ -39,8 +38,8 @@ def train_model(X, Y, epochs=50, k=3, conv_layers=4):
     model.add(keras.layers.Dense(units=(DIM_ROWS*DIM_COLS*3), activation='sigmoid' ))
     model.add(keras.layers.Reshape((DIM_ROWS,DIM_COLS,3)))
 
-    model.compile(optimizer=keras.optimizers.SGD(learning_rate=1e-5), loss='mean_squared_error')
-    model.fit(X, Y, batch_size=20, epochs=epochs, verbose=2, validation_split=0)
+    model.compile(optimizer=keras.optimizers.SGD(learning_rate=1e-3, momentum=0.9), loss='mean_squared_error')
+    model.fit(X, Y, batch_size=50, epochs=epochs, verbose=2, validation_split=0)
 
     model.save(MODEL_FILE_NAME)
     return model
