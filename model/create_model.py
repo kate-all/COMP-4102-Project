@@ -24,15 +24,22 @@ def preprocess_data(src):
     return X,Y
 
 def train_model(X, Y, epochs=50, k=3, conv_layers=4):
-    # keras model
+    # downsampling
     model = keras.Sequential()
 
-    model.add(keras.layers.Conv2D(input_shape=(DIM_ROWS, DIM_COLS, 1), filters=64, kernel_size=(3, 3),
-                                     padding="same", activation="relu"))
+    model.add(keras.layers.Conv2D(input_shape=(DIM_ROWS, DIM_COLS, 1), filters=64, kernel_size=(k, k),
+                                     padding="valid", activation="relu"))
+    model.add(keras.layers.MaxPool2D((2, 2)))
 
-    for _ in range(conv_layers):
-        model.add(keras.layers.Conv2D(filters=64, kernel_size=(k, k), padding="same", activation="relu"))
-        model.add(keras.layers.MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
+    model.add(keras.layers.Conv2D(filters=32, kernel_size=(k, k), padding="valid", activation="relu"))
+    model.add(keras.layers.MaxPool2D((2, 2)))
+
+    # upsampling
+    model.add(keras.layers.UpSampling2D((2,2)))
+    model.add(keras.layers.Conv2DTranspose(filters=32, kernel_size=(k,k), padding="valid", activation="relu"))
+
+    model.add(keras.layers.UpSampling2D((2,2)))
+    model.add(keras.layers.Conv2DTranspose(filters=64, kernel_size=(k,k), padding="valid", activation="relu"))
 
     model.add(keras.layers.Flatten())
     model.add(keras.layers.Dense(units=(DIM_ROWS*DIM_COLS*3), activation='sigmoid' ))
