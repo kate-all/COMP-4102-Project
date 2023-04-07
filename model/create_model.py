@@ -7,10 +7,6 @@ import tensorflow as tf
 import numpy as np
 
 def preprocess_data(src):
-    '''X = np.zeros([0,DIM_ROWS,DIM_COLS,1])
-    Y = np.zeros([0,DIM_ROWS,DIM_COLS,3])'''
-
-    files = os.listdir(src + X_PATH)
     X = keras.utils.image_dataset_from_directory(src + X_PATH, image_size=(DIM_ROWS, DIM_COLS), batch_size=20, labels=None, color_mode="grayscale")
 
     Y = keras.utils.image_dataset_from_directory(src + Y_PATH, image_size=(DIM_ROWS, DIM_COLS), batch_size=20, labels=None, color_mode="rgb")
