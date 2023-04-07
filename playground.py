@@ -31,7 +31,7 @@ def display_results(x, y, ground_truth=None):
         fig.add_subplot(rows, cols, 3)
         plt.imshow(ground_truth)
         plt.title("Ground Truth")
-
+ZZ
     plt.show()
 
 def colourize(model, img_filename, show_ground_truth=True):
@@ -58,7 +58,9 @@ def colourize(model, img_filename, show_ground_truth=True):
 
 
 model = keras.models.load_model(MODEL_PATH + MODEL_FILE_NAME)
-colourize(model, "0gfjPV.jpg")
+colourize(model, "lighter.jpg")
+#colourize(model, "beach.jpg")
+#colourize(model, "woman_with_hat.jpg")
 
 
 
