@@ -1,20 +1,16 @@
 import numpy as np
 import tensorflow as tf
-from config import MODEL_PATH, TEST_PATH, X_PATH, Y_PATH, TEMP
+from config import MODEL_PATH, TEST_PATH, X_PATH, Y_PATH, TEMP, MODEL_FILE_NAME
 import matplotlib.pyplot as plt
 from tensorflow import keras
 from PIL import Image
 import cv2
-from model.create_model import run_experiment
 
 # Environment/Backend stuff
 import matplotlib as mpl
 mpl.use('tkAgg')
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
-
-def load_model():
-    return tf.keras.models.load_model(MODEL_PATH)
 
 def display_results(x, y, ground_truth=None):
     fig = plt.figure(figsize=(10, 7))
@@ -60,10 +56,9 @@ def colourize(model, img_filename, show_ground_truth=True):
     else:
         display_results(x, y_hat)
 
-if __name__ == "__main__":
-    model = run_experiment(500,5,6)
-    colourize(model, "0gfjPV.jpg")
-    #model.predict(TEST_PATH + TEMP + "0gfjPV.jpg")
+
+model = keras.models.load_model(MODEL_PATH + MODEL_FILE_NAME)
+colourize(model, "0gfjPV.jpg")
 
 
 
