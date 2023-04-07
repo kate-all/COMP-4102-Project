@@ -1,4 +1,4 @@
-opencv
-tensorflow
+tensorflow==2.8.0
+tf-models-official==2.8.0
+tensorflow_io==0.23.1
 numpy
-matplotlib
