@@ -31,25 +31,25 @@ def train_model(data, epochs=50, k=3, conv_layers=4):
     # keras model
     model = keras.Sequential()
 
-    model.add(keras.layers.Conv2D(input_shape=(DIM_ROWS, DIM_COLS, 1), filters=64, kernel_size=(k, k),
+    model.add(keras.layers.Conv2D(input_shape=(DIM_ROWS, DIM_COLS, 1), filters=16, kernel_size=(k, k),
                                      padding="valid", activation="relu"))
     model.add(keras.layers.MaxPool2D((2, 2)))
 
-    model.add(keras.layers.Conv2D(filters=32, kernel_size=(k, k), padding="valid", activation="relu"))
+    model.add(keras.layers.Conv2D(filters=4, kernel_size=(k, k), padding="valid", activation="relu"))
     model.add(keras.layers.MaxPool2D((2, 2)))
 
     # upsampling
     model.add(keras.layers.UpSampling2D((2,2)))
-    model.add(keras.layers.Conv2DTranspose(filters=32, kernel_size=(k,k), padding="valid", activation="relu"))
+    model.add(keras.layers.Conv2DTranspose(filters=4, kernel_size=(k,k), padding="valid", activation="relu"))
 
     model.add(keras.layers.UpSampling2D((2,2)))
-    model.add(keras.layers.Conv2DTranspose(filters=64, kernel_size=(k,k), padding="valid", activation="relu"))
+    model.add(keras.layers.Conv2DTranspose(filters=16, kernel_size=(k,k), padding="valid", activation="relu"))
 
     model.add(keras.layers.Flatten())
     model.add(keras.layers.Dense(units=(DIM_ROWS*DIM_COLS*3), activation='sigmoid' ))
     model.add(keras.layers.Reshape((DIM_ROWS,DIM_COLS,3)))
 
-    model.compile(optimizer=keras.optimizers.SGD(learning_rate=1e-5), loss='mean_squared_error')
+    model.compile(optimizer=keras.optimizers.SGD(learning_rate=1e-7), loss='mean_squared_error')
     model.fit(data, batch_size=20, epochs=epochs, verbose=2, validation_split=0)
 
     model.save(MODEL_FILE_NAME)
@@ -65,4 +65,4 @@ def run_experiment(num_epochs, kernel_size, num_conv_layers):
     return model
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-run_experiment(500,5,4)
+run_experiment(1250,5,4)
