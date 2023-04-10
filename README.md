@@ -10,7 +10,8 @@ be found in my [report](https://docs.google.com/document/d/1ZT98bGkPrcdLA2NphA-X
 ### Getting Started
 1. Clone this repo
 2. Run `pip install -r requirements.txt`
-3. Unzip `model.h5.zip` in the same directory*
+3. Download the `model.h5` file I submitted on Brightspace.
+3. Place `model.h5` in the `model/` directory, unzip if necessary.*
 4. Run `playground.py`*
 
 *These steps may take a bit of time since `model.h5` is a large file
