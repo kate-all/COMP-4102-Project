@@ -57,12 +57,8 @@ def train_model(data, epochs=50, k=3, conv_layers=4):
 
 def run_experiment(num_epochs, kernel_size, num_conv_layers):
     train_data = preprocess_data(TRAIN_PATH)
-    val_data = preprocess_data(VALIDATE_PATH)
     model = train_model(train_data, epochs=num_epochs, k=kernel_size, conv_layers=num_conv_layers)
-    eval = model.evaluate(val_data, batch_size=100, return_dict=False)
-    print("Validation Loss:", eval)
-
     return model
 
-print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-run_experiment(1250,5,4)
+#print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+#run_experiment(1250,5,4)

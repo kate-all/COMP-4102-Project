@@ -1,6 +1,6 @@
 # Data paths
 TRAIN_PATH = "data/train/"
-TEST_PATH = "data/test/"
+TEST_PATH = "images/"
 VALIDATE_PATH = "data/validate/"
 
 X_PATH = "greyscale/"

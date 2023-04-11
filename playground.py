@@ -1,10 +1,10 @@
 import numpy as np
-import tensorflow as tf
-from config import MODEL_PATH, TEST_PATH, X_PATH, Y_PATH, TEMP, MODEL_FILE_NAME
+from config import MODEL_PATH, TEST_PATH, X_PATH, Y_PATH, TEMP, MODEL_FILE_NAME, VALIDATE_PATH, TRAIN_PATH
 import matplotlib.pyplot as plt
 from tensorflow import keras
 from PIL import Image
 import cv2
+from model.create_model import preprocess_data
 
 # Environment/Backend stuff
 import matplotlib as mpl
@@ -31,7 +31,6 @@ def display_results(x, y, ground_truth=None):
         fig.add_subplot(rows, cols, 3)
         plt.imshow(ground_truth)
         plt.title("Ground Truth")
-ZZ
     plt.show()
 
 def colourize(model, img_filename, show_ground_truth=True):
@@ -56,11 +55,21 @@ def colourize(model, img_filename, show_ground_truth=True):
     else:
         display_results(x, y_hat)
 
+def evaluate(model):
+    train_data = preprocess_data(TRAIN_PATH)
+    val_data = preprocess_data(VALIDATE_PATH)
+    test_data = preprocess_data(TEST_PATH)
+
+    print("TRAIN LOSS:", model.evaluate(train_data, batch_size=100))
+    print("VALIDATION LOSS:", model.evaluate(val_data, batch_size=100))
+    print("TEST LOSS:", model.evaluate(test_data, batch_size=100))
 
 model = keras.models.load_model(MODEL_PATH + MODEL_FILE_NAME)
-colourize(model, "lighter.jpg")
+# colourize(model, "lighter.jpg")
 #colourize(model, "beach.jpg")
 #colourize(model, "woman_with_hat.jpg")
+
+# evaluate(model)
 
 
 
